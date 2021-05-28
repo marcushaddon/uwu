@@ -1,7 +1,12 @@
 type Replacement = {
     name: string;
     pattern: RegExp;
-    val: string;
+    val: string | ((match: string) => string);
+}
+
+type ReplacementCommand = {
+    match: RegExpMatchArray;
+    replacement: string | ((match: string) => string);
 }
 
 const CONSONANTS = '[bcdfghjklmnpqrstvxyz]';
@@ -13,32 +18,49 @@ const theReplacements: Replacement[] = [
         val: 'uwu'
     },
     {
+        name: 'th to ff',
+        pattern: '(?<!^)th(?!e$)',
+        val: 'ff'
+    },
+    {
         name: 'r to w',
-        pattern: `r+(?!${CONSONANTS})`,
+        pattern: `r+`,
         val: 'w'
+    },
+    {
+        name: 'l to w',
+        pattern: 'l+',
+        val: 'w'
+    },
+    {
+        name: 'tt to dd',
+        pattern: 'tt',
+        val: 'dd'
     }
 ].map(rep => ({ ...rep, pattern: new RegExp(rep.pattern) }));
 
-const uwuifyWord = (input: string): { res: string} => {
-    const res = theReplacements.reduce((output, rep) => {
-        while (true) {
-            const res = output.match(rep.pattern);
-            if (res === null) break;
-            const [match, ] = res;
-            output = output.replace(match, rep.val);
-        }
-
-        return output
-    }, input);
-    
-    return { res };
+const getViableCommands = (input: string): ReplacementCommand[] => {
+    return theReplacements.reduce((cmds, rep) => {
+        const match = input.match(rep.pattern);
+        if (match === null) return cmds;
+        return [ ...cmds, { match, replacement: rep.val }]
+    }, [] as ReplacementCommand[]);
 };
+
+const uwuifyWord = (input: string): string => {
+    const cmds = getViableCommands(input);
+    
+    return cmds
+        .reduce((output, cmd) => {
+            const val = typeof cmd.replacement === 'string' ? cmd.replacement : cmd.replacement(cmd.match[0]);
+            return output.replace(cmd.match[0], val);
+        }, input);
+}
 
 const uwuify = (input: string): { res: string } => {
     const res = input
         .split(' ')
         .map(uwuifyWord)
-        .map(p => p.res)
         .join(' ');
 
     return { res };

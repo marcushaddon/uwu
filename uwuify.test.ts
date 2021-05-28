@@ -1,16 +1,31 @@
 import uwuify from './uwuify';
 
-describe('uwuify', () => {
+describe('uwuify deterministic', () => {
     for (const test of [
         {
             desc: 'replaces you with uwu',
             input: 'would you like a drink?',
-            output: 'would uwu like a dwink?'
+            output: 'wouwd uwu wike a dwink?'
         },
         {
             desc: 'replaces r with w',
-            input: 'my brain hurts!',
-            output: 'my bwain hurts!'
+            input: 'this hurts my brain!',
+            output: 'this huwts my bwain!'
+        },
+        {
+            desc: 'replaces ttle with ddel',
+            input: 'this is a little weird',
+            output: 'this is a widdle weiwd'
+        },
+        {
+            desc: 'double ll to w',
+            input: 'hello there!',
+            output: 'hewo thewe!'
+        },
+        {
+            desc: 'th to ff',
+            input: 'im with this band',
+            output: 'im wiff this band'
         }
     ]) {
         it(test.desc, () => {
