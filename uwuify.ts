@@ -55,7 +55,7 @@ const uwuifyWord = (input: string): string => {
             const val = typeof cmd.replacement === 'string' ? cmd.replacement : cmd.replacement(cmd.match[0]);
             return output.replace(cmd.match[0], val);
         }, input);
-}
+};
 
 const uwuify = (input: string): { res: string } => {
     const res = input
@@ -64,6 +64,6 @@ const uwuify = (input: string): { res: string } => {
         .join(' ');
 
     return { res };
-}
+};
 
 export default uwuify;
