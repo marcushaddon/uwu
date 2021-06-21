@@ -2,19 +2,17 @@ type Replacement = {
     name: string;
     pattern: RegExp;
     val: string | ((match: string) => string);
-}
+};
 
 type ReplacementCommand = {
     match: RegExpMatchArray;
     replacement: string | ((match: string) => string);
-}
-
-const CONSONANTS = '[bcdfghjklmnpqrstvxyz]';
+};
 
 const theReplacements: Replacement[] = [
     {
         name: 'you to uwu',
-        pattern: `you`,
+        pattern: 'you',
         val: 'uwu'
     },
     {
@@ -24,13 +22,16 @@ const theReplacements: Replacement[] = [
     },
     {
         name: 'r to w',
-        pattern: `r+`,
+        pattern: 'r+',
         val: 'w'
     },
     {
         name: 'l to w',
         pattern: 'l+',
-        val: 'w'
+        val: ((ls: string) => {
+            console.log('MATCH', ls)
+            return 'w'.repeat(ls.length)
+        })
     },
     {
         name: 'tt to dd',
@@ -53,6 +54,7 @@ const uwuifyWord = (input: string): string => {
     return cmds
         .reduce((output, cmd) => {
             const val = typeof cmd.replacement === 'string' ? cmd.replacement : cmd.replacement(cmd.match[0]);
+
             return output.replace(cmd.match[0], val);
         }, input);
 };

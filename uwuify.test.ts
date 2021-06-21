@@ -9,18 +9,18 @@ describe('uwuify deterministic', () => {
         },
         {
             desc: 'replaces r with w',
-            input: 'thiws hurts my brain!',
+            input: 'this hurts my brain!',
             output: 'this huwts my bwain!'
         },
         {
             desc: 'replaces ttle with ddel',
-            input: 'thiws is a little weird',
+            input: 'this is a little weird',
             output: 'this is a widdle weiwd'
         },
         {
             desc: 'double ll to w',
             input: 'hello there!',
-            output: 'hewo thewe!'
+            output: 'hewwo thewe!'
         },
         {
             desc: 'th to ff',
